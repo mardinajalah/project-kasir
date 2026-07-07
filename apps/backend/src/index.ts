@@ -1,17 +1,7 @@
-import express from "express";
-import cors from "cors";
+import app from './app';
 
-const app = express();
+const PORT = Number(process.env.PORT) || 4000;
 
-app.use(cors());
-app.use(express.json());
-
-app.get("/", (_req, res) => {
-  res.json({
-    message: "Backend berjalan dari monorepo",
-  });
-});
-
-app.listen(4000, () => {
-  console.log("Backend running on http://localhost:4000");
+app.listen(PORT, () => {
+  console.log('Backend running on http://localhost:' + PORT);
 });
