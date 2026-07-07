@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "pnpm --parallel --filter \"./apps/*\" dev",
     "build": "pnpm --recursive --filter \"./apps/*\" build",
-    "lint": "pnpm --recursive --filter \"./apps/*\" lint"
+    "lint": "pnpm --recursive --filter \"./apps/*\" lint",
+    "frontend": "pnpm --filter \"./apps/frontend\" dev",
+    "backend": "pnpm --filter \"./apps/backend\" dev"
   },
   "keywords": [],
   "author": "",

@@ -1,1 +1,19 @@
-GET http://localhost:3000/api/products
+GET http://localhost:3000/api/product
+
+###
+GET http://localhost:3000/api/product/1
+
+###
+POST http://localhost:3000/api/product
+Content-Type: application/json
+
+{
+  "kode": "P001",
+  "name": "kue bolu coklat",
+  "buyPrice": 20000,
+  "sellPrice": 15000,
+  "stock": 100,
+  "minStock": 3,
+  "unitId": 1,
+  "categoryId": 1
+}
