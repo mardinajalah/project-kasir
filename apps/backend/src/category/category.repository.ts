@@ -3,22 +3,19 @@ import { db } from '../db';
 import { categoryTable } from '../db/schema';
 import { CategoryType } from '@kasir/types';
 
-export const getAllCategories = async () => {
-  const categories = await db.select().from(categoryTable);
-  return categories;
-};
+export class CategoryRepository {
+  getAllcategorys = async () => {
+    const categorys = await db.select().from(categoryTable);
+    return categorys;
+  }
 
-export const getCategoryById = async (categoryId: number) => {
-  const [category] = await db
-    .select()
-    .from(categoryTable)
-    .where(eq(categoryTable.id, categoryId))
-    .limit(1);
+  getCategoryById = async (categoryId: number) => {
+    const [category] = await db.select().from(categoryTable).where(eq(categoryTable.id, categoryId)).limit(1);
+    return category;
+  }
 
-  return category;
-};
-
-export const createcategory = async (newcategory: CategoryType) => {
-  const newcategoryData = await db.insert(categoryTable).values(newcategory);
-  return newcategoryData;
+  createCategory = async (newCategory: CategoryType) => {
+    const newCategoryData = await db.insert(categoryTable).values(newCategory);
+    return newCategoryData;
+  }
 }

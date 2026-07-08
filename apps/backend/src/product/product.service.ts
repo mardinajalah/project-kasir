@@ -1,37 +1,43 @@
 import { ProductType } from '@kasir/types';
-import { createProduct, getAllProducts, getProductById } from './product.repository';
-import { getUnitById } from '../unit/unit.repository';
-import { getCategoryById } from "../category/category.repository"
+import { ProductRepository } from './product.repository';
+import { UnitsRepository } from '../unit/unit.repository';
+import { CategoryRepository } from '../category/category.repository';
 
-export const getAllDataProducts = async () => {
-  const products = await getAllProducts();
-  return products;
-};
+export class ProductService {
+  private productRepository = new ProductRepository();
+  private categoryRepository = new CategoryRepository();
+  private unitRepository = new UnitsRepository();
 
-export const getDataProductById = async (productId: number) => {
-  const product = await getProductById(productId);
-  return product;
-};
+  getAllProducts = async () => {
+    const products = await this.productRepository.getAllProducts();
+    return products;
+  }
 
-export const createDataProduct = async (newProduct: ProductType) => {
-  const unitId = await getUnitById(newProduct.unitId);
-  const categoryId = await getCategoryById(newProduct.categoryId)
-  const products = await getAllDataProducts()
+  getProductById = async (productId: number) => {
+    const product = await this.productRepository.getProductById(productId);
+    return product;
+  }
 
-  products.map((product) => {
-    if(product.kode === newProduct.kode) {
-      throw new Error("The product code already exists.")
+  createProduct = async (newProduct: ProductType) => {
+    const unitId = await this.unitRepository.getUnitsById(newProduct.id);
+    const categoryId = await this.categoryRepository.getCategoryById(newProduct.id);
+    const products = await this.getAllProducts();
+
+    products.map((product) => {
+      if (product.kode === newProduct.kode) {
+        throw new Error('The product code already exists.');
+      }
+    });
+
+    if (!newProduct || typeof newProduct !== 'object') {
+      throw new Error('Invalid product ');
     }
-  })
 
-  if (!newProduct || typeof newProduct !== 'object') {
-    throw new Error('Invalid product data');
+    if (!unitId || !categoryId) {
+      throw new Error('Unit or category id not found');
+    }
+
+    const createdProduct = await this.productRepository.createProduct(newProduct);
+    return createdProduct;
   }
-
-  if (!unitId || !categoryId) {
-    throw new Error('Unit or category id not found');
-  }
-
-  const createdProduct = await createProduct(newProduct);
-  return createdProduct;
-};
+}
