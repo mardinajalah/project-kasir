@@ -16,18 +16,20 @@ export const getDataProductById = async (productId: number) => {
 export const createDataProduct = async (newProduct: ProductType) => {
   const unitId = await getUnitById(newProduct.unitId);
   const categoryId = await getCategoryById(newProduct.categoryId)
+  const products = await getAllDataProducts()
 
+  products.map((product) => {
+    if(product.kode === newProduct.kode) {
+      throw new Error("The product code already exists.")
+    }
+  })
 
   if (!newProduct || typeof newProduct !== 'object') {
     throw new Error('Invalid product data');
   }
 
-  if (!unitId.id) {
-    throw new Error('Unit id not found');
-  }
-
-  if(!categoryId.id) {
-    throw new Error('Unit id not found');
+  if (!unitId || !categoryId) {
+    throw new Error('Unit or category id not found');
   }
 
   const createdProduct = await createProduct(newProduct);

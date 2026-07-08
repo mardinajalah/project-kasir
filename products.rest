@@ -8,8 +8,8 @@ POST http://localhost:3000/api/product
 Content-Type: application/json
 
 {
-  "kode": "P001",
-  "name": "kue bolu coklat",
+  "kode": "P002",
+  "name": "kue pisang coklat",
   "buyPrice": 20000,
   "sellPrice": 15000,
   "stock": 100,
