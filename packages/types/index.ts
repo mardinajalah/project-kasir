@@ -1,1 +1,3 @@
-export type { ProductType, UnitType, CategoryType } from './productType';
+export type { ProductType } from './productType';
+export type { CategoryType } from './categoryType';
+export type { UnitType } from "./unitType"
