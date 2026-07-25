@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { ProductType } from '@kasir/types';
+import { formatIdr } from '@kasir/utils';
 
 type ProductServiceType = {
   getAllProducts(): Promise<ProductType[]>;
@@ -19,12 +20,16 @@ export class ProductController {
       const products = await this.productService.getAllProducts();
       res.status(200).json({
         message: 'Products fetched successfully',
-        data: products,
+        data: products.map((product) => ({
+          ...product,
+          buyPrice: formatIdr(product.buyPrice),
+          sellPrice: formatIdr(product.sellPrice),
+        })),
       });
     } catch (error) {
       res.status(500).json({ error: error instanceof Error ? error.message : 'Failed to fetch products' });
     }
-  };
+  }
 
   async getProductById(req: Request, res: Response) {
     const id = Number(req.params.id);
@@ -41,12 +46,16 @@ export class ProductController {
       }
       res.status(200).json({
         message: 'Product fetched successfully',
-        data: product,
+        data: {
+          ...product,
+          buyPrice: formatIdr(product.buyPrice),
+          sellPrice: formatIdr(product.sellPrice),
+        },
       });
     } catch (error) {
       res.status(500).json({ error: error instanceof Error ? error.message : 'Failed to fetch product' });
     }
-  };
+  }
 
   async createProduct(req: Request, res: Response) {
     const newProduct: ProductType = req.body;
@@ -59,5 +68,5 @@ export class ProductController {
     } catch (error) {
       res.status(500).json({ error: error instanceof Error ? error.message : 'Failed to create product' });
     }
-  };
+  }
 }
