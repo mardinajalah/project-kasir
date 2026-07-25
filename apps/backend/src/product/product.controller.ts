@@ -1,11 +1,20 @@
 import type { Request, Response } from 'express';
-import { ProductService } from './product.service';
 import { ProductType } from '@kasir/types';
 
-export class ProductController {
-  private productService = new ProductService();
+type ProductServiceType = {
+  getAllProducts(): Promise<ProductType[]>;
+  getProductById(id: number): Promise<ProductType | undefined>;
+  createProduct(newProduct: ProductType): Promise<unknown>;
+};
 
-  getProducts = async (_req: Request, res: Response) => {
+export class ProductController {
+  private productService;
+
+  constructor(productService: ProductServiceType) {
+    this.productService = productService;
+  }
+
+  async getProducts(_req: Request, res: Response) {
     try {
       const products = await this.productService.getAllProducts();
       res.status(200).json({
@@ -15,9 +24,9 @@ export class ProductController {
     } catch (error) {
       res.status(500).json({ error: error instanceof Error ? error.message : 'Failed to fetch products' });
     }
-  }
+  };
 
-  getProductById = async (req: Request, res: Response) => {
+  async getProductById(req: Request, res: Response) {
     const id = Number(req.params.id);
 
     if (!Number.isInteger(id) || id <= 0) {
@@ -37,9 +46,9 @@ export class ProductController {
     } catch (error) {
       res.status(500).json({ error: error instanceof Error ? error.message : 'Failed to fetch product' });
     }
-  }
+  };
 
-  createProduct = async (req: Request, res: Response) => {
+  async createProduct(req: Request, res: Response) {
     const newProduct: ProductType = req.body;
 
     try {

@@ -1,26 +1,43 @@
-import { ProductType } from '@kasir/types';
-import { ProductRepository } from './product.repository';
-import { UnitsRepository } from '../unit/unit.repository';
-import { CategoryRepository } from '../category/category.repository';
+import { ProductType, UnitType, CategoryType } from '@kasir/types';
+
+type ProductRepositoryType = {
+  getAllProducts(): Promise<ProductType[]>;
+  getProductById(id: number): Promise<ProductType | undefined>;
+  createProduct(newProduct: ProductType): Promise<unknown>;
+};
+
+type UnitRepositoryType = {
+  getUnitsById(id: number): Promise<UnitType | undefined>;
+};
+
+type CategoryRepositoryType = {
+  getCategoryById(id: number): Promise<CategoryType | undefined>;
+};
 
 export class ProductService {
-  private productRepository = new ProductRepository();
-  private categoryRepository = new CategoryRepository();
-  private unitRepository = new UnitsRepository();
+  private productRepository;
+  private unitRepository;
+  private categoryRepository;
 
-  getAllProducts = async () => {
+  constructor(productRepository: ProductRepositoryType, unitRepository: UnitRepositoryType, categoryRepository: CategoryRepositoryType) {
+    this.productRepository = productRepository;
+    this.unitRepository = unitRepository;
+    this.categoryRepository = categoryRepository;
+  }
+
+  async getAllProducts() {
     const products = await this.productRepository.getAllProducts();
     return products;
-  }
+  };
 
-  getProductById = async (productId: number) => {
+  async getProductById(productId: number) {
     const product = await this.productRepository.getProductById(productId);
     return product;
-  }
+  };
 
-  createProduct = async (newProduct: ProductType) => {
-    const unitId = await this.unitRepository.getUnitsById(newProduct.id);
-    const categoryId = await this.categoryRepository.getCategoryById(newProduct.id);
+  async createProduct(newProduct: ProductType) {
+    const unit = await this.unitRepository.getUnitsById(newProduct.unitId);
+    const category = await this.categoryRepository.getCategoryById(newProduct.categoryId);
     const products = await this.getAllProducts();
 
     products.map((product) => {
@@ -33,11 +50,11 @@ export class ProductService {
       throw new Error('Invalid product ');
     }
 
-    if (!unitId || !categoryId) {
+    if (!unit || !category) {
       throw new Error('Unit or category id not found');
     }
 
     const createdProduct = await this.productRepository.createProduct(newProduct);
     return createdProduct;
-  }
+  };
 }

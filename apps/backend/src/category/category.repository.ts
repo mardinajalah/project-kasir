@@ -4,17 +4,17 @@ import { categoryTable } from '../db/schema';
 import { CategoryType } from '@kasir/types';
 
 export class CategoryRepository {
-  getAllcategorys = async () => {
+  async getAllcategorys() {
     const categorys = await db.select().from(categoryTable);
     return categorys;
   }
 
-  getCategoryById = async (categoryId: number) => {
+  async getCategoryById(categoryId: number) {
     const [category] = await db.select().from(categoryTable).where(eq(categoryTable.id, categoryId)).limit(1);
     return category;
   }
 
-  createCategory = async (newCategory: CategoryType) => {
+  async createCategory(newCategory: CategoryType) {
     const newCategoryData = await db.insert(categoryTable).values(newCategory);
     return newCategoryData;
   }
