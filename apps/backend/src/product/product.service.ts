@@ -1,4 +1,4 @@
-import { ProductType, UnitType, CategoryType } from '@kasir/types';
+import { ProductType, UnitType, CategoryType, VendorType } from '@kasir/types';
 
 type ProductRepositoryType = {
   getAllProducts(): Promise<ProductType[]>;
@@ -14,15 +14,21 @@ type CategoryRepositoryType = {
   getCategoryById(id: number): Promise<CategoryType | undefined>;
 };
 
+type VendorRepositoryType = {
+  getVendorById(id: number): Promise<VendorType | undefined>;
+};
+
 export class ProductService {
   private productRepository;
   private unitRepository;
   private categoryRepository;
+  private vendorRepository
 
-  constructor(productRepository: ProductRepositoryType, unitRepository: UnitRepositoryType, categoryRepository: CategoryRepositoryType) {
+  constructor(productRepository: ProductRepositoryType, unitRepository: UnitRepositoryType, categoryRepository: CategoryRepositoryType, vendorRepository: VendorRepositoryType) {
     this.productRepository = productRepository;
     this.unitRepository = unitRepository;
     this.categoryRepository = categoryRepository;
+    this.vendorRepository = vendorRepository
   }
 
   async getAllProducts() {
@@ -38,10 +44,11 @@ export class ProductService {
   async createProduct(newProduct: ProductType) {
     const unit = await this.unitRepository.getUnitsById(newProduct.unitId);
     const category = await this.categoryRepository.getCategoryById(newProduct.categoryId);
+    const vendor = await this.vendorRepository.getVendorById(newProduct.vendorId)
     const products = await this.getAllProducts();
 
     products.map((product) => {
-      if (product.kode === newProduct.kode) {
+      if (product.kodeProduct === newProduct.kodeProduct) {
         throw new Error('The product code already exists.');
       }
     });
@@ -54,8 +61,8 @@ export class ProductService {
       throw new Error('Invalid product');
     }
 
-    if (!unit || !category) {
-      throw new Error('Unit or category id not found');
+    if (!unit || !category || !vendor) {
+      throw new Error('Unit or category or vendor id not found');
     }
 
     const dataProduct = await this.productRepository.createProduct(newProduct);

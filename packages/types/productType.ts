@@ -1,6 +1,6 @@
 export type ProductType = {
   id: number;
-  kode: string;
+  kodeProduct: string;
   name: string;
   buyPrice: number;
   sellPrice: number;
@@ -8,4 +8,5 @@ export type ProductType = {
   minStock: number;
   categoryId: number;
   unitId: number;
+  vendorId: number;
 };

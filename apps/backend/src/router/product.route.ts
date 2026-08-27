@@ -5,13 +5,15 @@ import { ProductService } from '../product/product.service';
 import { ProductRepository } from '../product/product.repository';
 import { UnitsRepository } from '../unit/unit.repository';
 import { CategoryRepository } from '../category/category.repository';
+import { VendorRepository } from '../vendor/vendor.repository';
 
 const router = Router();
 
 const productRepository = new ProductRepository();
 const unitRepository = new UnitsRepository();
 const categoryRepository = new CategoryRepository();
-const productService = new ProductService(productRepository, unitRepository, categoryRepository);
+const vendorRepository = new VendorRepository()
+const productService = new ProductService(productRepository, unitRepository, categoryRepository, vendorRepository);
 const productController = new ProductController(productService);
 
 router.get('/', (req, res) => productController.getProducts(req, res));
