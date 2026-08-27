@@ -4,7 +4,7 @@ import { categoryTable } from '../db/schema';
 import { CategoryType } from '@kasir/types';
 
 export class CategoryRepository {
-  async getAllcategorys() {
+  async getAllcategories() {
     const categorys = await db.select().from(categoryTable);
     return categorys;
   }
@@ -15,6 +15,10 @@ export class CategoryRepository {
   }
 
   async createCategory(newCategory: CategoryType) {
+
+    // if(!newCategory)
+
+
     const newCategoryData = await db.insert(categoryTable).values(newCategory);
     return newCategoryData;
   }

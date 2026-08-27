@@ -33,12 +33,12 @@ export class ProductController {
 
   async getProductById(req: Request, res: Response) {
     const id = Number(req.params.id);
-
-    if (!Number.isInteger(id) || id <= 0) {
-      return res.status(400).json({ error: 'Invalid product id' });
-    }
-
+    
     try {
+      if (!Number.isInteger(id) || id <= 0) {
+        return res.status(400).json({ error: 'Invalid product id' });
+      }
+
       const product = await this.productService.getProductById(id);
 
       if (!product) {

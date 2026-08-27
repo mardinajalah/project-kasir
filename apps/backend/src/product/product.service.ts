@@ -28,12 +28,12 @@ export class ProductService {
   async getAllProducts() {
     const products = await this.productRepository.getAllProducts();
     return products;
-  };
+  }
 
   async getProductById(productId: number) {
     const product = await this.productRepository.getProductById(productId);
     return product;
-  };
+  }
 
   async createProduct(newProduct: ProductType) {
     const unit = await this.unitRepository.getUnitsById(newProduct.unitId);
@@ -46,15 +46,19 @@ export class ProductService {
       }
     });
 
+    if (Object.keys(newProduct).length < 8) {
+      throw new Error('Insufficient data');
+    }
+
     if (!newProduct || typeof newProduct !== 'object') {
-      throw new Error('Invalid product ');
+      throw new Error('Invalid product');
     }
 
     if (!unit || !category) {
       throw new Error('Unit or category id not found');
     }
 
-    const createdProduct = await this.productRepository.createProduct(newProduct);
-    return createdProduct;
-  };
+    const dataProduct = await this.productRepository.createProduct(newProduct);
+    return dataProduct;
+  }
 }
