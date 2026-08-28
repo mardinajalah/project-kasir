@@ -7,6 +7,7 @@ interface ProductServiceType {
   getProductById(id: number): Promise<ProductType | undefined>;
   existingProduct(kode: string): Promise<ProductType | undefined>;
   createProduct(newData: ProductType): Promise<unknown>;
+  updateProduct(newData: ProductType, id: number): Promise<unknown>;
 }
 
 interface UnitServiceType {
@@ -115,6 +116,32 @@ export class ProductController {
       });
     } catch (error) {
       res.status(500).json({ error: error instanceof Error ? error.message : 'Failed to create product' });
+    }
+  }
+
+  async updateProduct(req: Request, res: Response) {
+    const productId = Number(req.params.id);
+    const newProduct = req.body;
+    try {
+      if (!Number.isInteger(productId) || productId <= 0) {
+        return res.status(400).json({ error: 'Invalid product id' });
+      }
+
+      const productById = await this.productService.getProductById(productId);
+
+      if (!productById) {
+        return res.status(404).json({
+          message: 'productId Not Found',
+        });
+      }
+
+      await this.productService.updateProduct(newProduct, productId);
+
+      res.status(200).json({
+        message: 'product succsesfuly update',
+      });
+    } catch (error) {
+      res.status(500).json({ error: error instanceof Error ? error.message : 'Failed to update product' });
     }
   }
 }

@@ -23,4 +23,8 @@ export class ProductRepository {
     const newProductData = await db.insert(productTable).values(newProduct);
     return newProductData;
   }
+
+  async updateProduct(newProduct: ProductType, productId: number) {
+    return await db.update(productTable).set(newProduct).where(eq(productTable.id, productId));
+  }
 }

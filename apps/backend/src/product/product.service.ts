@@ -5,7 +5,8 @@ interface ProductRepositoryType {
   getProductById(id: number): Promise<ProductType | undefined>;
   getProductByCode(kode: string): Promise<ProductType | undefined>;
   createProduct(newData: ProductType): Promise<unknown>;
-};
+  updateProduct(newData: ProductType, id: number): Promise<unknown>;
+}
 
 export class ProductService {
   private productRepository;
@@ -25,12 +26,16 @@ export class ProductService {
   }
 
   async existingProduct(kodeProduct: string) {
-    const product = await this.productRepository.getProductByCode(kodeProduct)
-    return product
+    const product = await this.productRepository.getProductByCode(kodeProduct);
+    return product;
   }
 
   async createProduct(newProduct: ProductType) {
     const dataProduct = await this.productRepository.createProduct(newProduct);
     return dataProduct;
+  }
+
+  async updateProduct(newProduct: ProductType, productId: number) {
+    return await this.productRepository.updateProduct(newProduct, productId)
   }
 }
