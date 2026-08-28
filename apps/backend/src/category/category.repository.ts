@@ -15,10 +15,6 @@ export class CategoryRepository {
   }
 
   async createCategory(newCategory: CategoryType) {
-
-    // if(!newCategory)
-
-
     const newCategoryData = await db.insert(categoryTable).values(newCategory);
     return newCategoryData;
   }

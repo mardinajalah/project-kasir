@@ -3,8 +3,8 @@ import type { Request, Response } from 'express';
 
 interface CategoryServiceType {
   getAllCategories(): Promise<CategoryType[]>;
-  getCategoryById(categoryId: number): Promise<CategoryType>;
-  createCtegory(newCategory: CategoryType): Promise<CategoryType>;
+  getCategoryById(id: number): Promise<CategoryType>;
+  createCtegory(newData: CategoryType): Promise<CategoryType>;
 }
 
 export class CategoryController {

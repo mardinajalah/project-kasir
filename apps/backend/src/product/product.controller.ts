@@ -1,18 +1,37 @@
 import type { Request, Response } from 'express';
-import { ProductType } from '@kasir/types';
+import { CategoryType, ProductType, UnitType, VendorType } from '@kasir/types';
 import { formatIdr } from '@kasir/utils';
 
-type ProductServiceType = {
+interface ProductServiceType {
   getAllProducts(): Promise<ProductType[]>;
   getProductById(id: number): Promise<ProductType | undefined>;
-  createProduct(newProduct: ProductType): Promise<unknown>;
-};
+  existingProduct(kode: string): Promise<ProductType | undefined>;
+  createProduct(newData: ProductType): Promise<unknown>;
+}
+
+interface UnitServiceType {
+  getUnitsById(id: number): Promise<UnitType | undefined>;
+}
+
+interface CategoryServiceType {
+  getCategoryById(id: number): Promise<CategoryType | undefined>;
+}
+
+interface VendorServiceType {
+  getVendorById(id: number): Promise<VendorType | undefined>;
+}
 
 export class ProductController {
   private productService;
+  private unitService;
+  private categoryService;
+  private vendorService;
 
-  constructor(productService: ProductServiceType) {
+  constructor(productService: ProductServiceType, unitService: UnitServiceType, categoryService: CategoryServiceType, vendorService: VendorServiceType) {
     this.productService = productService;
+    this.unitService = unitService;
+    this.categoryService = categoryService;
+    this.vendorService = vendorService;
   }
 
   async getProducts(_req: Request, res: Response) {
@@ -33,7 +52,7 @@ export class ProductController {
 
   async getProductById(req: Request, res: Response) {
     const id = Number(req.params.id);
-    
+
     try {
       if (!Number.isInteger(id) || id <= 0) {
         return res.status(400).json({ error: 'Invalid product id' });
@@ -61,6 +80,35 @@ export class ProductController {
     const newProduct: ProductType = req.body;
 
     try {
+      const dataUnitById = await this.unitService.getUnitsById(newProduct.unitId);
+      const dataCategoryById = await this.categoryService.getCategoryById(newProduct.categoryId);
+      const dataVendorById = await this.vendorService.getVendorById(newProduct.vendorId);
+      const dataProductByCode = await this.productService.existingProduct(newProduct.kodeProduct);
+
+      if (dataProductByCode) {
+        return res.status(409).json({
+          message: 'The product code already exists.',
+        });
+      }
+
+      if (!dataUnitById) {
+        return res.status(404).json({
+          message: 'The unitId not found',
+        });
+      }
+
+      if (!dataCategoryById) {
+        return res.status(404).json({
+          message: 'The categoryId not found',
+        });
+      }
+
+      if (!dataVendorById) {
+        return res.status(404).json({
+          message: 'The vendorId not found',
+        });
+      }
+
       await this.productService.createProduct(newProduct);
       res.status(201).json({
         message: 'Product created successfully',

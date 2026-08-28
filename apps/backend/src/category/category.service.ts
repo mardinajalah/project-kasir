@@ -3,7 +3,7 @@ import { CategoryType } from '@kasir/types';
 type CategoryRepository = {
   getAllcategories(): Promise<CategoryType[]>;
   getCategoryById(id: number): Promise<CategoryType | undefined>;
-  createCategory(newCategory: CategoryType): Promise<unknown>;
+  createCategory(newData: CategoryType): Promise<unknown>;
 };
 
 export class CategoryService {

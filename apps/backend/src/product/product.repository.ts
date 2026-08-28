@@ -14,6 +14,11 @@ export class ProductRepository {
     return product;
   }
 
+  async getProductByCode(kodeProduct: string) {
+    const [product] = await db.select().from(productTable).where(eq(productTable.kodeProduct, kodeProduct)).limit(1);
+    return product;
+  }
+
   async createProduct(newProduct: ProductType) {
     const newProductData = await db.insert(productTable).values(newProduct);
     return newProductData;
