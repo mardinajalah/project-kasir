@@ -149,11 +149,9 @@ export class ProductController {
         });
       }
 
-      const dataProduck = await this.productService.updateProduct(newProduct.data, productId);
-
+      await this.productService.updateProduct(newProduct.data, productId);
       res.status(202).json({
         message: 'product succsesfuly update',
-        data: dataProduck,
       });
     } catch (error) {
       res.status(500).json({ error: error instanceof Error ? error.message : 'Failed to update product' });
