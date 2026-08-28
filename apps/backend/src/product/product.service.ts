@@ -36,6 +36,7 @@ export class ProductService {
   }
 
   async updateProduct(newProduct: ProductType, productId: number) {
-    return await this.productRepository.updateProduct(newProduct, productId)
+    const dataProduct = await this.productRepository.updateProduct(newProduct, productId);
+    return dataProduct;
   }
 }

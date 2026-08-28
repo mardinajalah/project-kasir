@@ -27,6 +27,6 @@ const productController = new ProductController(productService, unitService, cat
 router.get('/', (req, res) => productController.getProducts(req, res));
 router.get('/:id', (req, res) => productController.getProductById(req, res));
 router.post('/', (req, res) => productController.createProduct(req, res));
-router.patch('/:id', (req, res) => productController.updateProduct(req, res));
+router.put('/:id', (req, res) => productController.updateProduct(req, res));
 
 export default router;

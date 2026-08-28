@@ -2,9 +2,9 @@ import { mysqlTable as table } from 'drizzle-orm/mysql-core';
 import * as t from 'drizzle-orm/mysql-core';
 
 export const timestamps = {
-  updated_at: t.timestamp(),
+  updated_at: t.timestamp().defaultNow(),
   created_at: t.timestamp().defaultNow().notNull(),
-  deleted_at: t.timestamp(),
+  deleted_at: t.timestamp().defaultNow(),
 };
 
 export const productTable = table(

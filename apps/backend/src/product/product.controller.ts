@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
-import { CategoryType, ProductType, UnitType, VendorType } from '@kasir/types';
+import { CategoryType, UnitType, VendorType } from '@kasir/types';
 import { formatIdr } from '@kasir/utils';
+import { insertProductSchema, ProductType } from '../db/validator';
 
 interface ProductServiceType {
   getAllProducts(): Promise<ProductType[]>;
@@ -78,13 +79,19 @@ export class ProductController {
   }
 
   async createProduct(req: Request, res: Response) {
-    const newProduct: ProductType = req.body;
-
+    const newProduct = insertProductSchema.safeParse(req.body);
     try {
-      const dataUnitById = await this.unitService.getUnitsById(newProduct.unitId);
-      const dataCategoryById = await this.categoryService.getCategoryById(newProduct.categoryId);
-      const dataVendorById = await this.vendorService.getVendorById(newProduct.vendorId);
-      const dataProductByCode = await this.productService.existingProduct(newProduct.kodeProduct);
+      if (!newProduct.success) {
+        return res.status(400).json({
+          message: 'Validation failed',
+          errors: newProduct.error.flatten(),
+        });
+      }
+
+      const dataUnitById = await this.unitService.getUnitsById(newProduct.data.unitId);
+      const dataCategoryById = await this.categoryService.getCategoryById(newProduct.data.categoryId);
+      const dataVendorById = await this.vendorService.getVendorById(newProduct.data.vendorId);
+      const dataProductByCode = await this.productService.existingProduct(newProduct.data.kodeProduct);
 
       if (dataProductByCode) {
         return res.status(409).json({
@@ -110,7 +117,7 @@ export class ProductController {
         });
       }
 
-      await this.productService.createProduct(newProduct);
+      await this.productService.createProduct(newProduct.data);
       res.status(201).json({
         message: 'Product created successfully',
       });
@@ -121,8 +128,15 @@ export class ProductController {
 
   async updateProduct(req: Request, res: Response) {
     const productId = Number(req.params.id);
-    const newProduct = req.body;
+    const newProduct = insertProductSchema.safeParse(req.body);
     try {
+      if (!newProduct.success) {
+        return res.status(400).json({
+          message: 'Validation failed',
+          errors: newProduct.error.flatten(),
+        });
+      }
+
       if (!Number.isInteger(productId) || productId <= 0) {
         return res.status(400).json({ error: 'Invalid product id' });
       }
@@ -135,10 +149,11 @@ export class ProductController {
         });
       }
 
-      await this.productService.updateProduct(newProduct, productId);
+      const dataProduck = await this.productService.updateProduct(newProduct.data, productId);
 
-      res.status(200).json({
+      res.status(202).json({
         message: 'product succsesfuly update',
+        data: dataProduck,
       });
     } catch (error) {
       res.status(500).json({ error: error instanceof Error ? error.message : 'Failed to update product' });
