@@ -6,6 +6,7 @@ interface ProductRepositoryType {
   getProductByCode(kode: string): Promise<ProductType | undefined>;
   createProduct(newData: ProductType): Promise<unknown>;
   updateProduct(newData: ProductType, id: number): Promise<unknown>;
+  deleteProduct(id: number): Promise<unknown>;
 }
 
 export class ProductService {
@@ -38,5 +39,9 @@ export class ProductService {
   async updateProduct(newProduct: ProductType, productId: number) {
     const dataProduct = await this.productRepository.updateProduct(newProduct, productId);
     return dataProduct;
+  }
+
+  async deleteProduct(productId: number) {
+    return await this.productRepository.deleteProduct(productId);
   }
 }

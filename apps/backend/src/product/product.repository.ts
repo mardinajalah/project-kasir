@@ -27,4 +27,8 @@ export class ProductRepository {
   async updateProduct(newProduct: ProductType, productId: number) {
     return await db.update(productTable).set(newProduct).where(eq(productTable.id, productId));
   }
+
+  async deleteProduct(productId: number) {
+    return await db.delete(productTable).where(eq(productTable.id, productId));
+  }
 }

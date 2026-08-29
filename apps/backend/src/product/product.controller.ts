@@ -9,6 +9,7 @@ interface ProductServiceType {
   existingProduct(kode: string): Promise<ProductType | undefined>;
   createProduct(newData: ProductType): Promise<unknown>;
   updateProduct(newData: ProductType, id: number): Promise<unknown>;
+  deleteProduct(id: number): Promise<unknown>;
 }
 
 interface UnitServiceType {
@@ -155,6 +156,26 @@ export class ProductController {
       });
     } catch (error) {
       res.status(500).json({ error: error instanceof Error ? error.message : 'Failed to update product' });
+    }
+  }
+
+  async deleteProduct(req: Request, res: Response) {
+    const productId = Number(req.params.id);
+    try {
+      const productById = await this.productService.getProductById(productId);
+
+      if (!productById) {
+        return res.status(404).json({
+          message: 'productId Not Found',
+        });
+      }
+
+      await this.productService.deleteProduct(productId)
+      res.status(202).json({
+        message: 'product succsesfuly delete',
+      });
+    } catch (error) {
+      res.status(500).json({ error: error instanceof Error ? error.message : 'Failed to delete product' });
     }
   }
 }
