@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { CategoryType, UnitType, VendorType } from '@kasir/types';
 import { formatIdr } from '@kasir/utils';
-import { insertProductSchema, ProductType } from '../db/validator';
+import { insertProductSchema, ProductType } from '../../db/validator';
 
 interface ProductServiceType {
   getAllProducts(): Promise<ProductType[]>;
@@ -170,7 +170,7 @@ export class ProductController {
         });
       }
 
-      await this.productService.deleteProduct(productId)
+      await this.productService.deleteProduct(productId);
       res.status(202).json({
         message: 'product succsesfuly delete',
       });

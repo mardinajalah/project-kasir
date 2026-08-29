@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
-import { db } from '../db';
-import { vendorTable } from '../db/schema';
+import { db } from '../../db';
+import { vendorTable } from '../../db/schema';
 import { VendorType } from '@kasir/types';
 
 export class VendorRepository {

@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
-import { db } from '../db';
-import { categoryTable } from '../db/schema';
+import { db } from '../../db';
+import { categoryTable } from '../../db/schema';
 import { CategoryType } from '@kasir/types';
 
 export class CategoryRepository {

@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
-import { db } from '../db';
-import { productTable } from '../db/schema';
+import { db } from '../../db';
+import { productTable } from '../../db/schema';
 import { ProductType } from '@kasir/types';
 
 export class ProductRepository {

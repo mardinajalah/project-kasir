@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
-import { db } from '../db';
-import { unitTable } from '../db/schema';
+import { db } from '../../db';
+import { unitTable } from '../../db/schema';
 import { UnitType } from '@kasir/types';
 
 export class UnitsRepository {

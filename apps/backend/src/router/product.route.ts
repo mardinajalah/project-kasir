@@ -1,14 +1,14 @@
 import { Router } from 'express';
 
-import { ProductController } from '../product/product.controller';
-import { ProductService } from '../product/product.service';
-import { ProductRepository } from '../product/product.repository';
-import { UnitService } from '../unit/unit.service';
-import { UnitsRepository } from '../unit/unit.repository';
-import { CategoryRepository } from '../category/category.repository';
-import { CategoryService } from '../category/category.service';
-import { VendorRepository } from '../vendor/vendor.repository';
-import { VendorService } from '../vendor/vendor.service';
+import { ProductController } from '../models/product/product.controller';
+import { ProductService } from '../models/product/product.service';
+import { ProductRepository } from '../models/product/product.repository';
+import { UnitService } from '../models/unit/unit.service';
+import { UnitsRepository } from '../models/unit/unit.repository';
+import { CategoryRepository } from '../models/category/category.repository';
+import { CategoryService } from '../models/category/category.service';
+import { VendorRepository } from '../models/vendor/vendor.repository';
+import { VendorService } from '../models/vendor/vendor.service';
 
 const router = Router();
 
