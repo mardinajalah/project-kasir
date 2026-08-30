@@ -25,13 +25,7 @@ export class ProductRepository {
   }
 
   async updateProduct(newProduct: ProductType, productId: number) {
-    return await db
-      .update(productTable)
-      .set({
-        ...newProduct,
-        updated_at: new Date(),
-      })
-      .where(eq(productTable.id, productId));
+    return await db.update(productTable).set(newProduct).where(eq(productTable.id, productId));
   }
 
   async deleteProduct(productId: number) {
