@@ -66,3 +66,21 @@ export const unitTable = table(
   },
   (table) => [t.uniqueIndex('name_idx').on(table.name), t.uniqueIndex('kode_unit_idx').on(table.kodeUnit)],
 );
+
+export const userTable = table(
+  'user',
+  {
+    id: t.int('id').primaryKey().autoincrement(),
+    kodeUser: t.varchar('kode_user', { length: 255 }),
+    name: t.varchar('name', { length: 255 }).notNull(),
+    email: t.varchar('email', { length: 255 }).notNull(),
+    password: t.varchar('password', { length: 255 }).notNull(),
+    role: t.mysqlEnum(["admin", "user"]).default('user'),
+    ...timestamps,
+  },
+  (table) => [t.uniqueIndex('kode_user_idx').on(table.kodeUser)],
+);
+
+export type InsertUser = typeof userTable.$inferInsert;
+export type SelectUser = typeof userTable.$inferSelect;
+

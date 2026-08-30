@@ -1,5 +1,5 @@
 import { createInsertSchema } from 'drizzle-orm/zod';
-import { productTable } from './schema';
+import { productTable, userTable } from './schema';
 import z from 'zod';
 
 export const insertProductSchema = createInsertSchema(productTable).extend({
@@ -14,4 +14,45 @@ export const insertProductSchema = createInsertSchema(productTable).extend({
   vendorId: z.number().int().nonnegative(),
 });
 
+export const registerSchema = z
+  .object({
+    name: z.string().min(1, 'Name is required'),
+    email: z.string().email('Invalid email address'),
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+    confirmPassword: z.string().min(6, 'Confirm password must be at least 6 characters'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Password and confirm password do not match',
+    path: ['confirmPassword'],
+  });
+
+export const loginSchema = z.object({
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(1, 'Password is required'),
+});
+
+export const createUserSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  kodeUser: z.string().nullable().optional(),
+  role: z.enum(['admin', 'user']).default('user'),
+});
+
+export const updateUserSchema = z.object({
+  name: z.string().min(1, 'Name is required').optional(),
+  email: z.string().email('Invalid email address').optional(),
+  password: z.string().min(6, 'Password must be at least 6 characters').optional(),
+  kodeUser: z.string().nullable().optional(),
+  role: z.enum(['admin', 'user']).optional(),
+});
+
+export const insertUserSchema = registerSchema;
+
+export type RegisterType = z.infer<typeof registerSchema>;
+export type LoginType = z.infer<typeof loginSchema>;
+export type CreateUserType = z.infer<typeof createUserSchema>;
+export type UpdateUserType = z.infer<typeof updateUserSchema>;
+export type UserType = RegisterType;
 export type ProductType = z.infer<typeof insertProductSchema>;
+
