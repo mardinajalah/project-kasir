@@ -152,7 +152,7 @@ export class ProductController {
 
       await this.productService.updateProduct(newProduct.data, productId);
       res.status(202).json({
-        message: 'product succsesfuly update',
+        message: 'product updated succsesfuly',
       });
     } catch (error) {
       res.status(500).json({ error: error instanceof Error ? error.message : 'Failed to update product' });
@@ -172,7 +172,7 @@ export class ProductController {
 
       await this.productService.deleteProduct(productId);
       res.status(202).json({
-        message: 'product succsesfuly delete',
+        message: 'product deleted succsesfuly',
       });
     } catch (error) {
       res.status(500).json({ error: error instanceof Error ? error.message : 'Failed to delete product' });
