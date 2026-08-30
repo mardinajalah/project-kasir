@@ -10,12 +10,12 @@ export class ProductRepository {
   }
 
   async getProductById(productId: number) {
-    const [product] = await db.select().from(productTable).where(eq(productTable.id, productId)).limit(1);
+    const [product] = await db.select().from(productTable).where(eq(productTable.id, productId));
     return product;
   }
 
   async getProductByCode(kodeProduct: string) {
-    const [product] = await db.select().from(productTable).where(eq(productTable.kodeProduct, kodeProduct)).limit(1);
+    const [product] = await db.select().from(productTable).where(eq(productTable.kodeProduct, kodeProduct));
     return product;
   }
 
