@@ -1,11 +1,12 @@
 import { ProductType } from '@kasir/types';
+import { UpdateProductType } from '../../db/validator';
 
 interface ProductRepositoryType {
   getAllProducts(): Promise<ProductType[]>;
   getProductById(id: number): Promise<ProductType | undefined>;
   getProductByCode(kode: string): Promise<ProductType | undefined>;
   createProduct(newData: ProductType): Promise<unknown>;
-  updateProduct(newData: ProductType, id: number): Promise<unknown>;
+  updateProduct(newData: UpdateProductType, id: number): Promise<unknown>;
   deleteProduct(id: number): Promise<unknown>;
 }
 

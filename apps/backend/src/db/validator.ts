@@ -14,6 +14,18 @@ export const insertProductSchema = createInsertSchema(productTable).extend({
   vendorId: z.number().int().nonnegative(),
 });
 
+export const updateProductSchema = z.object({
+  kodeProduct: z.string().min(1, 'Product code is required').optional(),
+  name: z.string().min(1, 'Product name is required').optional(),
+  buyPrice: z.number().int().nonnegative().optional(),
+  sellPrice: z.number().int().nonnegative().optional(),
+  stock: z.number().int().nonnegative().optional(),
+  minStock: z.number().int().nonnegative().optional(),
+  categoryId: z.number().int().nonnegative().optional(),
+  unitId: z.number().int().nonnegative().optional(),
+  vendorId: z.number().int().nonnegative().optional(),
+});
+
 export const registerSchema = z
   .object({
     name: z.string().min(1, 'Name is required'),
@@ -49,10 +61,11 @@ export const updateUserSchema = z.object({
 
 export const insertUserSchema = registerSchema;
 
+export type UpdateProductType = z.infer<typeof updateUserSchema>
+
 export type RegisterType = z.infer<typeof registerSchema>;
 export type LoginType = z.infer<typeof loginSchema>;
 export type CreateUserType = z.infer<typeof createUserSchema>;
 export type UpdateUserType = z.infer<typeof updateUserSchema>;
 export type UserType = RegisterType;
 export type ProductType = z.infer<typeof insertProductSchema>;
-
