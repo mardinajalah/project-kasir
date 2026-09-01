@@ -1,13 +1,14 @@
 import type { Request, Response } from 'express';
 import { CategoryType, UnitType, VendorType } from '@kasir/types';
 import { formatIdr } from '@kasir/utils';
-import { insertProductSchema, ProductType, updateProductSchema, UpdateProductType } from '../../db/validator';
+import { createProductSchema, CreateProductType, updateProductSchema, UpdateProductType } from '../../db/validator';
+import { SelectProduct } from '../../db/schema';
 
 interface ProductServiceType {
-  getAllProducts(): Promise<ProductType[]>;
-  getProductById(id: number): Promise<ProductType | undefined>;
-  existingProduct(kode: string): Promise<ProductType | undefined>;
-  createProduct(newData: ProductType): Promise<unknown>;
+  getAllProducts(): Promise<SelectProduct[]>;
+  getProductById(id: number): Promise<SelectProduct | undefined>;
+  existingProduct(kode: string): Promise<SelectProduct | undefined>;
+  createProduct(newData: CreateProductType): Promise<unknown>;
   updateProduct(newData: UpdateProductType, id: number): Promise<unknown>;
   deleteProduct(id: number): Promise<unknown>;
 }
@@ -80,7 +81,7 @@ export class ProductController {
   }
 
   async createProduct(req: Request, res: Response) {
-    const newProduct = insertProductSchema.safeParse(req.body);
+    const newProduct = createProductSchema.safeParse(req.body);
     try {
       if (!newProduct.success) {
         return res.status(400).json({

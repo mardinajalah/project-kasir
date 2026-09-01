@@ -81,6 +81,9 @@ export const userTable = table(
   (table) => [t.uniqueIndex('kode_user_idx').on(table.kodeUser)],
 );
 
+export type InsertProduct = typeof productTable.$inferInsert
+export type SelectProduct = typeof productTable.$inferSelect
+
 export type InsertUser = typeof userTable.$inferInsert;
 export type SelectUser = typeof userTable.$inferSelect;
 

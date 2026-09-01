@@ -1,12 +1,12 @@
-import { ProductType } from '@kasir/types';
-import { UpdateProductType } from '../../db/validator';
+import { CreateProductType, UpdateProductType } from '../../db/validator';
+import { InsertProduct, SelectProduct } from '../../db/schema';
 
 interface ProductRepositoryType {
-  getAllProducts(): Promise<ProductType[]>;
-  getProductById(id: number): Promise<ProductType | undefined>;
-  getProductByCode(kode: string): Promise<ProductType | undefined>;
-  createProduct(newData: ProductType): Promise<unknown>;
-  updateProduct(newData: UpdateProductType, id: number): Promise<unknown>;
+  getAllProducts(): Promise<SelectProduct[]>;
+  getProductById(id: number): Promise<SelectProduct | undefined>;
+  getProductByCode(kode: string): Promise<SelectProduct | undefined>;
+  createProduct(newData: InsertProduct): Promise<unknown>;
+  updateProduct(newData: Partial<InsertProduct>, id: number): Promise<unknown>;
   deleteProduct(id: number): Promise<unknown>;
 }
 
@@ -32,12 +32,12 @@ export class ProductService {
     return product;
   }
 
-  async createProduct(newProduct: ProductType) {
+  async createProduct(newProduct: CreateProductType) {
     const dataProduct = await this.productRepository.createProduct(newProduct);
     return dataProduct;
   }
 
-  async updateProduct(newProduct: ProductType, productId: number) {
+  async updateProduct(newProduct: UpdateProductType, productId: number) {
     const dataProduct = await this.productRepository.updateProduct(newProduct, productId);
     return dataProduct;
   }

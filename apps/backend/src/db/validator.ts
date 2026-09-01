@@ -1,8 +1,6 @@
-import { createInsertSchema } from 'drizzle-orm/zod';
-import { productTable, userTable } from './schema';
 import z from 'zod';
 
-export const insertProductSchema = createInsertSchema(productTable).extend({
+export const createProductSchema = z.object({
   kodeProduct: z.string().min(1, 'Product code is required'),
   name: z.string().min(1, 'Product name is required'),
   buyPrice: z.number().int().nonnegative(),
@@ -59,13 +57,12 @@ export const updateUserSchema = z.object({
   role: z.enum(['admin', 'user']).optional(),
 });
 
-export const insertUserSchema = registerSchema;
-
-export type UpdateProductType = z.infer<typeof updateUserSchema>
-
 export type RegisterType = z.infer<typeof registerSchema>;
 export type LoginType = z.infer<typeof loginSchema>;
+
+export type CreateProductType = z.infer<typeof createProductSchema>
+export type UpdateProductType = z.infer<typeof updateProductSchema>;
+
 export type CreateUserType = z.infer<typeof createUserSchema>;
 export type UpdateUserType = z.infer<typeof updateUserSchema>;
 export type UserType = RegisterType;
-export type ProductType = z.infer<typeof insertProductSchema>;

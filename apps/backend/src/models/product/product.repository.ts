@@ -1,30 +1,29 @@
 import { eq } from 'drizzle-orm';
 import { db } from '../../db';
-import { productTable } from '../../db/schema';
-import { ProductType } from '@kasir/types';
+import { InsertProduct, productTable, SelectProduct } from '../../db/schema';
 
 export class ProductRepository {
-  async getAllProducts() {
+  async getAllProducts(): Promise<SelectProduct[]> {
     const products = await db.select().from(productTable);
     return products;
   }
 
-  async getProductById(productId: number) {
+  async getProductById(productId: number): Promise<SelectProduct> {
     const [product] = await db.select().from(productTable).where(eq(productTable.id, productId));
     return product;
   }
 
-  async getProductByCode(kodeProduct: string) {
+  async getProductByCode(kodeProduct: string): Promise<SelectProduct> {
     const [product] = await db.select().from(productTable).where(eq(productTable.kodeProduct, kodeProduct));
     return product;
   }
 
-  async createProduct(newProduct: ProductType) {
+  async createProduct(newProduct: InsertProduct) {
     const newProductData = await db.insert(productTable).values(newProduct);
     return newProductData;
   }
 
-  async updateProduct(newProduct: ProductType, productId: number) {
+  async updateProduct(newProduct: InsertProduct, productId: number) {
     return await db.update(productTable).set(newProduct).where(eq(productTable.id, productId));
   }
 
