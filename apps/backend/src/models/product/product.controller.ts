@@ -7,7 +7,6 @@ import { SelectProduct } from '../../db/schema';
 interface ProductServiceType {
   getAllProducts(): Promise<SelectProduct[]>;
   getProductById(id: number): Promise<SelectProduct | undefined>;
-  existingProduct(kode: string): Promise<SelectProduct | undefined>;
   createProduct(newData: CreateProductType): Promise<unknown>;
   updateProduct(newData: UpdateProductType, id: number): Promise<unknown>;
   deleteProduct(id: number): Promise<unknown>;
@@ -93,11 +92,13 @@ export class ProductController {
       const dataUnitById = await this.unitService.getUnitsById(newProduct.data.unitId);
       const dataCategoryById = await this.categoryService.getCategoryById(newProduct.data.categoryId);
       const dataVendorById = await this.vendorService.getVendorById(newProduct.data.vendorId);
-      const dataProductByCode = await this.productService.existingProduct(newProduct.data.kodeProduct);
+      const allProduct = await this.productService.getAllProducts();
 
-      if (dataProductByCode) {
+      const avaliabelKodeProduct = allProduct.find((avaliabel) => avaliabel.kodeProduct === newProduct.data.kodeProduct);
+
+      if (avaliabelKodeProduct) {
         return res.status(409).json({
-          message: 'The product code already exists.',
+          message: 'kode product already exists',
         });
       }
 
@@ -144,6 +145,15 @@ export class ProductController {
       }
 
       const productById = await this.productService.getProductById(productId);
+      const allProduct = await this.productService.getAllProducts();
+
+      const avaliabelKodeProduct = allProduct.find((avaliabel) => avaliabel.kodeProduct === newProduct.data.kodeProduct);
+
+      if (avaliabelKodeProduct) {
+        return res.status(409).json({
+          message: 'kode product already exists',
+        });
+      }
 
       if (!productById) {
         return res.status(404).json({

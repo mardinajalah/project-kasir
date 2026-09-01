@@ -4,7 +4,6 @@ import { InsertProduct, SelectProduct } from '../../db/schema';
 interface ProductRepositoryType {
   getAllProducts(): Promise<SelectProduct[]>;
   getProductById(id: number): Promise<SelectProduct | undefined>;
-  getProductByCode(kode: string): Promise<SelectProduct | undefined>;
   createProduct(newData: InsertProduct): Promise<unknown>;
   updateProduct(newData: Partial<InsertProduct>, id: number): Promise<unknown>;
   deleteProduct(id: number): Promise<unknown>;
@@ -24,11 +23,6 @@ export class ProductService {
 
   async getProductById(productId: number) {
     const product = await this.productRepository.getProductById(productId);
-    return product;
-  }
-
-  async existingProduct(kodeProduct: string) {
-    const product = await this.productRepository.getProductByCode(kodeProduct);
     return product;
   }
 
