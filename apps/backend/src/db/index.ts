@@ -1,13 +1,11 @@
-import dotenv from 'dotenv';
 import { drizzle } from 'drizzle-orm/mysql2';
 import mysql from 'mysql2/promise';
+import { envConfig } from '../config/env';
 
-dotenv.config({ path: '.env.local' });
-
-if (!process.env.DATABASE_URL) {
+if (!envConfig.databaseUrl) {
   throw new Error('DATABASE_URL is not defined in the environment variables.');
 }
 
-const connection = await mysql.createConnection(process.env.DATABASE_URL);
+const connection = await mysql.createConnection(envConfig.databaseUrl);
 
 export const db = drizzle({ client: connection });
