@@ -23,7 +23,7 @@ export class ProductRepository {
     return newProductData;
   }
 
-  async updateProduct(newProduct: InsertProduct, productId: number) {
+  async updateProduct(newProduct: Partial<InsertProduct>, productId: number) {
     return await db.update(productTable).set(newProduct).where(eq(productTable.id, productId));
   }
 
