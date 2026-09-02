@@ -1,15 +1,17 @@
 import express from 'express';
 import cors from 'cors';
 import routeProducts from './router/product.route';
-import routeUser from "./router/user.route";
-import routeAuth from "./router/auth.route";
+import routeUser from './router/user.route';
+import routeAuth from './router/auth.route';
 import { errorHandler } from './middlewares/errorHandler';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
 // configure express
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 // Routes
 app.use('/api/auth', routeAuth);

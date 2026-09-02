@@ -9,6 +9,7 @@ import { CategoryRepository } from '../models/category/category.repository';
 import { CategoryService } from '../models/category/category.service';
 import { VendorRepository } from '../models/vendor/vendor.repository';
 import { VendorService } from '../models/vendor/vendor.service';
+import { verifyToken } from '../middlewares/verifyToken';
 
 const router = Router();
 
@@ -24,7 +25,7 @@ const vendorService = new VendorService(vendorRepository);
 
 const productController = new ProductController(productService, unitService, categoryService, vendorService);
 
-router.get('/', (req, res) => productController.getProducts(req, res));
+router.get('/', verifyToken, (req, res) => productController.getProducts(req, res));
 router.post('/', (req, res) => productController.createProduct(req, res));
 router.get('/:id', (req, res) => productController.getProductById(req, res));
 router.put('/:id', (req, res) => productController.updateProduct(req, res));
