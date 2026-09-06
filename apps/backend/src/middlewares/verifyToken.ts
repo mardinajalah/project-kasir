@@ -20,6 +20,6 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
     req.user = decode;
     return next();
   } catch (error) {
-    return res.status(401).json(error);
+    return res.sendStatus(401);
   }
 };

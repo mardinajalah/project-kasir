@@ -1,36 +1,18 @@
 import type { Request, Response } from 'express';
-import { CategoryType, UnitType, VendorType } from '@kasir/types';
 import { formatIdr } from '@kasir/utils';
-import { createProductSchema, CreateProductType, updateProductSchema, UpdateProductType } from '../../db/validator';
-import { SelectProduct } from '../../db/schema';
-
-interface ProductServiceType {
-  getAllProducts(): Promise<SelectProduct[]>;
-  getProductById(id: number): Promise<SelectProduct | undefined>;
-  createProduct(newData: CreateProductType): Promise<unknown>;
-  updateProduct(newData: UpdateProductType, id: number): Promise<unknown>;
-  deleteProduct(id: number): Promise<unknown>;
-}
-
-interface UnitServiceType {
-  getUnitsById(id: number): Promise<UnitType | undefined>;
-}
-
-interface CategoryServiceType {
-  getCategoryById(id: number): Promise<CategoryType | undefined>;
-}
-
-interface VendorServiceType {
-  getVendorById(id: number): Promise<VendorType | undefined>;
-}
+import { createProductSchema, updateProductSchema } from '../../db/validator';
+import type { ProductService } from './product.service';
+import type { UnitService } from '../unit/unit.service';
+import type { CategoryService } from '../category/category.service';
+import type { VendorService } from '../vendor/vendor.service';
 
 export class ProductController {
-  private productService;
-  private unitService;
-  private categoryService;
-  private vendorService;
+  private productService: ProductService;
+  private unitService: UnitService;
+  private categoryService: CategoryService;
+  private vendorService: VendorService;
 
-  constructor(productService: ProductServiceType, unitService: UnitServiceType, categoryService: CategoryServiceType, vendorService: VendorServiceType) {
+  constructor(productService: ProductService, unitService: UnitService, categoryService: CategoryService, vendorService: VendorService) {
     this.productService = productService;
     this.unitService = unitService;
     this.categoryService = categoryService;

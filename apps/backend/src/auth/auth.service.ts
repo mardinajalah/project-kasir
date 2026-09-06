@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
 import { InsertUser, SelectUser } from '../db/schema';
 import { LoginType, RegisterType } from '../db/validator';
+import { envConfig } from '../config/env';
+import jwt from 'jsonwebtoken';
 
 export interface AuthRepositoryType {
   getUserByEmail(email: string): Promise<SelectUser | undefined>;
@@ -47,6 +49,18 @@ export class AuthService {
 
     // Exclude password from the return object
     const { password: _password, ...userWithoutPassword } = user;
-    return userWithoutPassword;
+
+    // create access
+    const accessToken = jwt.sign(userWithoutPassword, envConfig.accessKey as string, { expiresIn: '30s' });
+    const refreshToken = jwt.sign(userWithoutPassword, envConfig.refreshKey as string, { expiresIn: '1d' });
+
+    const oneDay = 24 * 60 * 60 * 1000;
+
+    return {
+      userWithoutPassword,
+      accessToken,
+      refreshToken,
+      oneDay
+    };
   }
 }
