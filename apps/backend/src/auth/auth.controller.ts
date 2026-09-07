@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { loginSchema, registerSchema } from '../db/validator';
 import type { AuthService } from './auth.service';
 
-
 export class AuthController {
   private authService: AuthService;
 
@@ -49,7 +48,7 @@ export class AuthController {
 
       return res.status(200).json({
         message: 'Login successful',
-        data: user,
+        data: user.userWithoutPassword,
         token: user.accessToken,
       });
     } catch (error) {
