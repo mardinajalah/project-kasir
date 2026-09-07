@@ -1,18 +1,10 @@
 import { CreateProductType, UpdateProductType } from '../../db/validator';
-import { InsertProduct, SelectProduct } from '../../db/schema';
-
-interface ProductRepositoryType {
-  getAllProducts(): Promise<SelectProduct[]>;
-  getProductById(id: number): Promise<SelectProduct | undefined>;
-  createProduct(newData: InsertProduct): Promise<unknown>;
-  updateProduct(newData: Partial<InsertProduct>, id: number): Promise<unknown>;
-  deleteProduct(id: number): Promise<unknown>;
-}
+import type { ProductRepository } from './product.repository';
 
 export class ProductService {
-  private productRepository;
+  private productRepository: ProductRepository;
 
-  constructor(productRepository: ProductRepositoryType) {
+  constructor(productRepository: ProductRepository) {
     this.productRepository = productRepository;
   }
 
